@@ -2,20 +2,31 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-	
-	<bean id="student1" class="com.tnsif.springcore_example.Student">
-		<property name="name" value="Vinti"/>
-	</bean>
-	
-	<bean id="student2" class="com.tnsif.springcore_example.Student">
-		<property name="name" value="Vinotini"/>
-	</bean>
-	
-	<bean id="mvit" class="com.tnsif.springcore_example.Collage">
-		<property name="student" ref="student1"/>
-	</bean>
-	
-	<bean id="smvec" class="com.tnsif.springcore_example.Collage">
-		<property name="student" ref="student2"></property>
-	</bean>
+    
+    <!-- Existing beans -->
+    <bean id="student1" class="com.tnsif.springcore_example.Student">
+        <property name="name" value="Vinti"/>
+    </bean>
+    
+    <bean id="student2" class="com.tnsif.springcore_example.Student">
+        <property name="name" value="Vinotini"/>
+    </bean>
+    
+    <bean id="mvit" class="com.tnsif.springcore_example.Collage">
+        <property name="student" ref="student1"/>
+    </bean>
+    
+    <bean id="smvec" class="com.tnsif.springcore_example.Collage">
+        <property name="student" ref="student2"/>
+    </bean>
+    
+    <!-- New beans for dependencyInjection package -->
+    <bean id="diStudent1" class="dependencyInjection.Student">
+        <property name="name" value="Di Vinti"/>
+    </bean>
+    
+    <bean id="diStudent2" class="dependencyInjection.Student1">
+        <property name="name" value="Di Vinotini"/>
+    </bean>
+
 </beans>
