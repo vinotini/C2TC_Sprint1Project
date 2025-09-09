@@ -1,72 +1,80 @@
 package com.tnsif.ShoppingMallManagement;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import java.util.List;
 
-@Entity
-public class Admin {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-    @Id
-    @Column(name = "admin_id")
-    private int adminId;
+import jakarta.persistence.NoResultException;
 
-    @Column(name = "admin_name")
-    private String adminName;
+@RestController
+@RequestMapping("/admins")
+public class AdminController {
 
-    @Column(name = "password")
-    private String password;
+    @Autowired
+    private AdminService service;
 
-    @Column(name = "email")
-    private String email;
-
-    public Admin() {
-        super();
+    // 🔹 GET all admins
+    @GetMapping
+    public List<Admin> list() {
+        return service.listAll();
     }
 
-    public Admin(int adminId, String adminName, String password, String email) {
-        super();
-        this.adminId = adminId;
-        this.adminName = adminName;
-        this.password = password;
-        this.email = email;
+    // 🔹 POST new admin
+    @PostMapping
+    public ResponseEntity<Admin> add(@RequestBody Admin admin) {
+        service.save(admin);
+        return new ResponseEntity<>(admin, HttpStatus.CREATED);
     }
 
-    public int getAdminId() {
-        return adminId;
+    // 🔹 GET admin by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Admin> get(@PathVariable Integer id) {
+        try {
+            Admin admin = service.get(id);
+            return new ResponseEntity<>(admin, HttpStatus.OK);
+        } catch (NoResultException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    public void setAdminId(int adminId) {
-        this.adminId = adminId;
+    // 🔹 DELETE admin
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        try {
+            service.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (NoResultException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    public String getAdminName() {
-        return adminName;
-    }
+    // 🔹 UPDATE admin
+    @PutMapping("/{id}")
+    public ResponseEntity<Admin> update(@PathVariable Integer id, @RequestBody Admin updatedAdmin) {
+        try {
+            Admin existing = service.get(id);
 
-    public void setAdminName(String adminName) {
-        this.adminName = adminName;
-    }
+            // update all fields
+            existing.setAdminName(updatedAdmin.getAdminName());
+            existing.setPassword(updatedAdmin.getPassword());
+            existing.setEmail(updatedAdmin.getEmail());
+            existing.setPhoneNumber(updatedAdmin.getPhoneNumber());
+            existing.setRole(updatedAdmin.getRole());
+            existing.setStatus(updatedAdmin.getStatus());
+            existing.setCreatedAt(updatedAdmin.getCreatedAt());
+            existing.setUpdatedAt(updatedAdmin.getUpdatedAt());
+            existing.setLastLogin(updatedAdmin.getLastLogin());
+            existing.setAddress(updatedAdmin.getAddress());
+            existing.setDepartment(updatedAdmin.getDepartment());
 
-    public String getPassword() {
-        return password;
-    }
+            service.update(existing);
+            return new ResponseEntity<>(existing, HttpStatus.OK);
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return "Admin [adminId=" + adminId + ", adminName=" + adminName +
-                ", password=" + password + ", email=" + email + "]";
+        } catch (NoResultException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
