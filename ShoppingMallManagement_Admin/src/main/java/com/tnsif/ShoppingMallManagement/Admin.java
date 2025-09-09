@@ -1,80 +1,176 @@
 package com.tnsif.ShoppingMallManagement;
 
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+@Entity
+public class Admin {
 
-import jakarta.persistence.NoResultException;
+    @Id
+    @Column(name = "admin_id")
+    private int adminId;
 
-@RestController
-@RequestMapping("/admins")
-public class AdminController {
+    @Column(name = "admin_name")
+    private String adminName;
 
-    @Autowired
-    private AdminService service;
+    @Column(name = "password")
+    private String password;
 
-    // 🔹 GET all admins
-    @GetMapping
-    public List<Admin> list() {
-        return service.listAll();
+    @Column(name = "email")
+    private String email;
+
+    // 🔹 Additional variables
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "role")
+    private String role;  // e.g. SUPER_ADMIN, MANAGER
+
+    @Column(name = "status")
+    private String status; // ACTIVE / INACTIVE
+
+    @Column(name = "created_at")
+    private String createdAt; // better to use LocalDateTime
+
+    @Column(name = "updated_at")
+    private String updatedAt;
+
+    @Column(name = "last_login")
+    private String lastLogin;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "department")
+    private String department;
+
+    // ✅ Default constructor
+    public Admin() {
+        super();
     }
 
-    // 🔹 POST new admin
-    @PostMapping
-    public ResponseEntity<Admin> add(@RequestBody Admin admin) {
-        service.save(admin);
-        return new ResponseEntity<>(admin, HttpStatus.CREATED);
+    // ✅ All-Args constructor
+    public Admin(int adminId, String adminName, String password, String email, String phoneNumber,
+                 String role, String status, String createdAt, String updatedAt,
+                 String lastLogin, String address, String department) {
+        super();
+        this.adminId = adminId;
+        this.adminName = adminName;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.lastLogin = lastLogin;
+        this.address = address;
+        this.department = department;
     }
 
-    // 🔹 GET admin by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Admin> get(@PathVariable Integer id) {
-        try {
-            Admin admin = service.get(id);
-            return new ResponseEntity<>(admin, HttpStatus.OK);
-        } catch (NoResultException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    // ✅ Getters & Setters
+    public int getAdminId() {
+        return adminId;
     }
 
-    // 🔹 DELETE admin
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        try {
-            service.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (NoResultException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public void setAdminId(int adminId) {
+        this.adminId = adminId;
     }
 
-    // 🔹 UPDATE admin
-    @PutMapping("/{id}")
-    public ResponseEntity<Admin> update(@PathVariable Integer id, @RequestBody Admin updatedAdmin) {
-        try {
-            Admin existing = service.get(id);
+    public String getAdminName() {
+        return adminName;
+    }
 
-            // update all fields
-            existing.setAdminName(updatedAdmin.getAdminName());
-            existing.setPassword(updatedAdmin.getPassword());
-            existing.setEmail(updatedAdmin.getEmail());
-            existing.setPhoneNumber(updatedAdmin.getPhoneNumber());
-            existing.setRole(updatedAdmin.getRole());
-            existing.setStatus(updatedAdmin.getStatus());
-            existing.setCreatedAt(updatedAdmin.getCreatedAt());
-            existing.setUpdatedAt(updatedAdmin.getUpdatedAt());
-            existing.setLastLogin(updatedAdmin.getLastLogin());
-            existing.setAddress(updatedAdmin.getAddress());
-            existing.setDepartment(updatedAdmin.getDepartment());
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
+    }
 
-            service.update(existing);
-            return new ResponseEntity<>(existing, HttpStatus.OK);
+    public String getPassword() {
+        return password;
+    }
 
-        } catch (NoResultException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(String lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    @Override
+    public String toString() {
+        return "Admin [adminId=" + adminId + ", adminName=" + adminName + ", password=" + password +
+                ", email=" + email + ", phoneNumber=" + phoneNumber + ", role=" + role +
+                ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt +
+                ", lastLogin=" + lastLogin + ", address=" + address + ", department=" + department + "]";
     }
 }
